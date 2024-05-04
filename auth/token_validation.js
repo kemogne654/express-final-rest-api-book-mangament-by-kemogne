@@ -1,10 +1,11 @@
 const { verify } = require("jsonwebtoken");
+
 module.exports = {
   checkToken: (req, res, next) => {
     let token = req.get("authorization");
     if (token) {
       token = token.slice(7);
-      verify(token, "kemognePenka1234", (error, decoded) => {
+      verify(token, "your_secret_key", (error, decoded) => {
         if (error) {
           return res.json({
             success: 0,

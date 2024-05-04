@@ -1,16 +1,16 @@
-const { sign } = require("jsonwebtoken");
 const {
   create,
-  getBookByemail,
+  getBookByEmail,
   deleteBook,
   updateBook,
   getBookById,
   getBook,
 } = require("./book.service");
+const { sign } = require("jsonwebtoken");
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 module.exports = {
   createBook: (req, res) => {
-    const body = req.body();
+    const body = req.body;
     const salt = genSaltSync(10);
     body.password = hashSync(body.password, salt);
     create(body, (error, results) => {
@@ -51,17 +51,12 @@ module.exports = {
     updateBook(body, (error, results) => {
       if (error) {
         return console.log(error);
-      }
-      if (!results) {
+      } else {
         return res.json({
-          success: 0,
-          message: "no data found or invalide data",
+          success: 1,
+          message: "updated successfully",
         });
       }
-      return res.json({
-        success: 1,
-        message: "updated successfully",
-      });
     });
   },
   deleteBook: (req, res) => {
@@ -82,9 +77,9 @@ module.exports = {
       });
     });
   },
-  getBookByemail: (req, res) => {
+  login: (req, res) => {
     const body = req.body;
-    getBookByemail(body.email, (error, results) => {
+    getBookByEmail(body.email, (error, results) => {
       if (error) {
         console.error(error);
         return res.status(500).json({
@@ -93,7 +88,6 @@ module.exports = {
         });
       }
       if (!results || results.length == 0) {
-        console.error(error);
         return res.status(401).json({
           success: 0,
           message: " invalide username or password ",
@@ -108,7 +102,7 @@ module.exports = {
         });
       }
       book.password = undefined;
-      const jsontoken = sign({ book }, "kemognePenka1234", { expiresIn: "1h" });
+      const jsontoken = sign({ book }, "your_secret_key", { expiresIn: "1h" });
       return res.json({
         success: 1,
         message: "Login successfull.....",

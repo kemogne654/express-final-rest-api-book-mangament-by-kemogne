@@ -1,5 +1,5 @@
 const {
-  getBookByemail,
+  login,
   deleteBook,
   updateBook,
   getBookById,
@@ -13,5 +13,5 @@ router.get("/:id", checkToken, getBookById);
 router.post("/", checkToken, createBook);
 router.delete("/", checkToken, deleteBook);
 router.patch("/", checkToken, updateBook);
-router.post("/login", checkToken, getBookByemail);
+router.post("/login", login);
 module.exports = router;
